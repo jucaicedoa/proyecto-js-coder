@@ -1,4 +1,4 @@
-//Ingresar respuesta usuario
+//Ingresar respuesta usuario desafio1
 function pedirRespuestas(secuencia, mensaje) {
   alert(mensaje);
   let respuestas = [];
@@ -10,7 +10,7 @@ function pedirRespuestas(secuencia, mensaje) {
 
   return respuestas;
 }
-//verificar respuesta usuario
+//verificar respuesta usuario desafio1
 function verificarRespuestas(secuencia, respuestas) {
   let acertoTodo = true;
 
@@ -38,16 +38,49 @@ function desafio1(){
   verificarRespuestas(secuencia, respuestas);
 }
 
+//Preguntas desafio2
+function hacerPregunta(pregunta, resultadoEsperado) {
+  let respuesta = parseInt(prompt("Resuelve: " + pregunta));
+  if (respuesta === resultadoEsperado) {
+    alert("¡Correcto!");
+    return true;
+  } else {
+    alert("Incorrecto. La respuesta era: " + resultadoEsperado);
+    return false;
+  }
+}
+//mostrar resultado desafio2
+function mostrarResultado(aciertos, total) {
+  if (aciertos === total) {
+    alert("¡Excelente! Respondiste todas las operaciones correctamente.");
+  } else {
+    alert("Acertaste " + aciertos + " de " + total + ". ¡Sigue practicando!");
+  }
 
-
-
-
-//Desafío 2
-function desafio2(){
-alert("Desafío 2")
-    
+  console.log("Total correctas:", aciertos);
 }
 
+//Desafío 2
+function desafio2() {
+  const operaciones = [
+    ["3 + 4", 7],
+    ["10 - 2", 8],
+    ["5 * 2", 10]
+  ];
+
+  let respuestasCorrectas = 0;
+
+  for (let i = 0; i < operaciones.length; i++) {
+    let pregunta = operaciones[i][0];
+    let resultadoEsperado = operaciones[i][1];
+
+    if (hacerPregunta(pregunta, resultadoEsperado)) {
+      respuestasCorrectas++;
+    }
+  }
+
+  mostrarResultado(respuestasCorrectas, operaciones.length);
+}
 
 //Desafío 3
 function desafio3(){
@@ -55,13 +88,11 @@ alert("Desafío 3")
     
 }
 
-
 //Desafío 4
 function desafio4(){
 alert("Desafío 4")
     
 }
-
 
 //Menu principal
 let menu;
