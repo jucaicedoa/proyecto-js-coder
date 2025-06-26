@@ -49,10 +49,10 @@ function hacerPregunta(pregunta, resultadoEsperado) {
     return false;
   }
 }
-//mostrar resultado desafio2
+//mostrar resultado desafios
 function mostrarResultado(aciertos, total) {
   if (aciertos === total) {
-    alert("¡Excelente! Respondiste todas las operaciones correctamente.");
+    alert("¡Excelente! Respondiste todo correctamente.");
   } else {
     alert("Acertaste " + aciertos + " de " + total + ". ¡Sigue practicando!");
   }
@@ -82,10 +82,48 @@ function desafio2() {
   mostrarResultado(respuestasCorrectas, operaciones.length);
 }
 
+//Preguntas Quiz desafio3
+function hacerPreguntaQuiz(pregunta, opciones, respuestaCorrecta) {
+  let mensaje = pregunta + "\n";
+  for (let i = 0; i < opciones.length; i++) {
+    mensaje = mensaje + (i + 1) + ". " + opciones[i] + "\n";
+  }
+
+  let respuesta = parseInt(prompt(mensaje));
+
+  if (respuesta === respuestaCorrecta) {
+    alert("¡Correcto!");
+    return true;
+  } else {
+    alert("Incorrecto. La respuesta era: " + opciones[respuestaCorrecta - 1]);
+    return false;
+  }
+}
 //Desafío 3
-function desafio3(){
-alert("Desafío 3")
-    
+function desafio3() {
+  let preguntas = [
+    "¿Cuál de estos animales es un mamífero?",
+    "¿Qué animal pone huevos?",
+    "¿Cuál de estos animales puede volar?"
+  ];
+
+  let opciones = [
+    ["Tiburón", "Delfín", "Pingüino"],
+    ["Perro", "Gato", "Gallina"],
+    ["Murciélago", "Elefante", "Canguro"]
+  ];
+
+  let respuestasCorrectas = [2, 3, 1];
+
+  let aciertos = 0;
+
+  for (let i = 0; i < preguntas.length; i++) {
+    if (hacerPreguntaQuiz(preguntas[i], opciones[i], respuestasCorrectas[i])) {
+      aciertos++;
+    }
+  }
+
+  mostrarResultado(aciertos, preguntas.length);
 }
 
 //Desafío 4
