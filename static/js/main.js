@@ -99,7 +99,7 @@ class PreguntaQuiz {
     }
 
     getCorrectOptionText() {
-        return this.options[this.indexarRespuestaCorrecta - 1];
+        return this.opciones[this.indexarRespuestaCorrecta - 1];
     }
 }
 
@@ -191,7 +191,7 @@ async function desafio2() {
 
 // Desafío 3: Quiz
 async function desafio3() {
-    const quizQuestions = [
+    const preguntasQuiz = [
         new PreguntaQuiz(
             "¿Cuál de estos animales es un mamífero?",
             ["Tiburón", "Delfín", "Pingüino"],
@@ -210,18 +210,18 @@ async function desafio3() {
     ];
 
     let currentQuestionIndex = 0;
-    let correctAnswersCount = 0;
+    let contadorRespuestasCorrectas = 0;
 
     const renderQuestion = () => {
-        if (currentQuestionIndex < quizQuestions.length) {
-            const q = quizQuestions[currentQuestionIndex];
+        if (currentQuestionIndex < preguntasQuiz.length) {
+            const q = preguntasQuiz[currentQuestionIndex];
             let optionsHtml = '';
-            for (const [index, option] of q.options.entries()) {
+            for (const [index, option] of q.opciones.entries()) {
                 optionsHtml += `<label><input type="radio" name="quiz-option" value="${index + 1}"> ${index + 1}. ${option}</label><br>`;
             }
 
             contenidoDesafio.innerHTML = `
-                <p>${q.question}</p>
+                <p>${q.pregunta}</p>
                 ${optionsHtml}
                 <button id="submit-desafio3">Responder</button>
             `;
@@ -231,7 +231,7 @@ async function desafio3() {
                 if (selectedOption) {
                     const userAnswer = parseInt(selectedOption.value);
                     if (q.isCorrect(userAnswer)) {
-                        correctAnswersCount++;
+                        contadorRespuestasCorrectas++;
                         alert("¡Correcto!");
                     } else {
                         alert(`Incorrecto. La respuesta era: ${q.getCorrectOptionText()}`);
@@ -243,10 +243,10 @@ async function desafio3() {
                 }
             };
         } else {
-            mostrarResultado(correctAnswersCount, quizQuestions.length, "Quiz");
+            mostrarResultado(contadorRespuestasCorrectas, preguntasQuiz.length, "Quiz");
         }
     };
-    renderQuestion(); // Inicia el desafío
+    renderQuestion(); // Iniciar el desafío
 }
 
 // Desafío 4: Adivina la palabra
