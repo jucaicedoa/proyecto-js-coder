@@ -1,14 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script defer src="/main.js"></script>
-    <title>Entrega1</title>
+    <title>Edukids - Plataforma Educativa</title>
+    <link rel="stylesheet" href="./static/css/style.css">
+    <script defer src="./static/js/main.js"></script>
 </head>
 <body>
-    <h1>Entrega 1</h1>
-    <p>La idea es hacer una plataforma llamada Edukids que permita apoyar el aprendizaje de niños de forma temática en temas como memoria, lógica, cultura y
-          lenguaje.</p>
+    <header>
+        <h1>Bienvenido a Edukids</h1>
+        <p>Una plataforma para apoyar el aprendizaje de niños en memoria, lógica, cultura y lenguaje.</p>
+    </header>
+
+    <main>
+        <section id="menu-seccion">
+            <h2>Selecciona un Desafío:</h2>
+            <div class="menu-opciones">
+                <button id="btn-desafio1" data-challenge="1">1. Memoria</button>
+                <button id="btn-desafio2" data-challenge="2">2. Operaciones</button>
+                <button id="btn-desafio3" data-challenge="3">3. Quiz</button>
+                <button id="btn-desafio4" data-challenge="4">4. Adivina la palabra</button>
+            </div>
+            <button id="btn-limpiar-score">Borrar Puntaje</button>
+            <p class="mensaje-salir">Para salir, cierra la pestaña.</p>
+
+            <div class="scores-tabla">
+                <h3>Puntajes Guardados:</h3>
+                <ul id="score-lista">
+                    </ul>
+            </div>
+        </section>
+
+        <section id="seccion-desafio" style="display: none;">
+            <h2 id="desafio-titulo"></h2>
+            <div id="contenido-desafio">
+                </div>
+            <button id="btn-volver-menu">Volver al Menú</button>
+        </section>
+
+        </main>
+
+    <footer>
+        <p>&copy; 2025 Edukids. Todos los derechos reservados.</p>
+    </footer>
+
 </body>
 </html>
