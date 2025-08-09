@@ -187,8 +187,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const desafioActual = desafiosParaLaPartida[rondaActual];
         const { tipo, secuencia, tiempo } = desafioActual;
 
-        let separador = (tipo === 'palabras' || tipo === 'colores') ? ' ' : '';
-        let placeholder = (tipo === 'palabras' || tipo === 'colores') ? 'PALABRA1 PALABRA2' : 'ABCD';
+        let separador = (tipo === 'palabras' || tipo === 'colores' || tipo=== 'formas') ? ' ' : '';
+        let placeholder = (tipo === 'palabras' || tipo === 'colores' || tipo=== 'formas') ? 'PALABRA1 PALABRA2' : 'ABCD';
         let instruccion = `Ronda ${rondaActual + 1} de ${RONDAS_DE_JUEGO}: Memoriza la secuencia de ${tipo}.`;
     
             contenidoDesafio.innerHTML = `
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.getElementById('verificar-desafio').onclick = () => {
                 const inputUsuario = document.getElementById('secuencia-usuario').value.toUpperCase();
-                const respuestaUsuario = (tipo === 'palabras' || tipo === 'colores') ? inputUsuario.split(' ') : inputUsuario.split('');                
+                const respuestaUsuario = (tipo === 'palabras' || tipo === 'colores' || tipo=== 'formas' || tipo=== 'numeros') ? inputUsuario.split(' ') : inputUsuario.split('');                
                 // Comparar respuesta
                 const esCorrecto = JSON.stringify(respuestaUsuario) === JSON.stringify(secuencia);
                 
@@ -329,41 +329,69 @@ document.addEventListener('DOMContentLoaded', () => {
     presentarPregunta();
 }
 
-    function iniciarDesafioAdivinarPalabra() {
-        const listaDePalabras = datosDeTodosLosDesafios.adivinaLaPalabra;
-        const desafioActual = listaDePalabras[Math.floor(Math.random() * listaDePalabras.length)];
+   function iniciarDesafioAdivinarPalabra() {
+ 
+    const RONDAS_DE_JUEGO = 2;
+    let rondaActual = 0;
+    let aciertos = 0;
+
+    const palabrasMezcladas = [...datosDeTodosLosDesafios.adivinaLaPalabra].sort(() => 0.5 - Math.random());
+    const palabrasParaLaPartida = palabrasMezcladas.slice(0, RONDAS_DE_JUEGO);
+
+    //Controla ronda
+    function jugarRonda() {
+ 
+        if (rondaActual >= RONDAS_DE_JUEGO) {
+            mostrarResultado(aciertos, RONDAS_DE_JUEGO, "Adivina la Palabra");
+            return;
+        }
+
+        const desafioActual = palabrasParaLaPartida[rondaActual];
         const { palabraSecreta, pistas, intentosMaximos } = desafioActual;
         let intentos = 0;
-
+        //Controla intentos
         function iniciarIntento() {
+
             if (intentos < intentosMaximos) {
                 contenidoDesafio.innerHTML = `
-                    <p>Adivina la palabra. Tienes ${intentosMaximos - intentos} intentos.</p>
+                    <p class="ronda-info">Palabra ${rondaActual + 1} de ${RONDAS_DE_JUEGO}</p>
+                    <p>Adivina la palabra. Te quedan ${intentosMaximos - intentos} intentos.</p>
                     <p><strong>Pista:</strong> ${pistas[intentos]}</p>
-                    <input type="text" id="intento-usuario" placeholder="Tu intento">
+                    <input type="text" id="intento-usuario" placeholder="Tu intento" autocomplete="off">
                     <button id="adivinar">Adivinar</button>
                 `;
+
+                document.getElementById('intento-usuario').focus();
+
                 document.getElementById('adivinar').onclick = () => {
-                    const intento = document.getElementById('intento-usuario').value.toUpperCase();
-                    if (intento === palabraSecreta) {
-                        mostrarResultado(1, 1, "Adivina la Palabra");
+                    const intentoUsuario = document.getElementById('intento-usuario').value.toUpperCase();
+                    
+                    // Si el usuario adivina la palabra
+                    if (intentoUsuario === palabraSecreta) {
+                        aciertos++;
+                        mostrarNotificacion("¡Correcto! Adivinaste la palabra.", "exito");
+                        rondaActual++; 
+                        setTimeout(jugarRonda, 1500); 
                     } else {
                         intentos++;
                         mostrarNotificacion("Incorrecto, ¡inténtalo de nuevo!", "error");
-                        if (intentos < intentosMaximos) {
-                            setTimeout(iniciarIntento, 1500);
-                        } else {
-                             setTimeout(() => {
-                                mostrarNotificacion(`Se acabaron los intentos. La palabra era ${palabraSecreta}`, "error");
-                                setTimeout(() => mostrarResultado(0, 1, "Adivina la Palabra"), 1500);
-                            }, 1500);
-                        }
+                        // siguiente pista
+                        setTimeout(iniciarIntento, 1500); 
                     }
                 };
-            } 
+            } else {
+                // Si se acabaron los intentos
+                mostrarNotificacion(`No adivinaste. La palabra era: ${palabraSecreta}`, "error");
+                rondaActual++; // siguiente ronda sin sumar punto
+                setTimeout(jugarRonda, 2000); // Empezamos la siguiente ronda
+            }
         }
+
         iniciarIntento();
     }
+
+    jugarRonda();
+}
     
     function mostrarReporte() {
     navegarHacia('reporte');
