@@ -21,6 +21,7 @@
             "tiempo": 4000
         }
     ],
+
     "operaciones": [
         { "pregunta": "7 + 6", "resultadoEsperado": 13 },
         { "pregunta": "18 - 9", "resultadoEsperado": 9 },
@@ -68,8 +69,36 @@
             "opciones": ["6", "8", "10"],
             "indiceRespuestaCorrecta": 1
         }
+    ],
+
+    "adivinaLaPalabra": [
+        {
+            "palabraSecreta": "GUITARRA",
+            "pistas": [
+                "Soy un instrumento musical.",
+                "Tengo cuerdas.",
+                "Me usan en muchos tipos de música, como el rock y el bolero."
+            ],
+            "intentosMaximos": 3
+        },
+        {
+            "palabraSecreta": "BICICLETA",
+            "pistas": [
+                "Tengo dos ruedas.",
+                "No necesito gasolina para moverme.",
+                "Te ayudo a hacer ejercicio al aire libre."
+            ],
+            "intentosMaximos": 3
+        },
+        {
+            "palabraSecreta": "SOL",
+            "pistas": [
+                "Soy una estrella gigante.",
+                "Doy luz y calor a la Tierra.",
+                "Por la noche, no me puedes ver."
+            ],
+            "intentosMaximos": 3
+        }
     ]
-
-
 
 }
