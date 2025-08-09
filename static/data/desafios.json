@@ -12,6 +12,46 @@
         { "pregunta": "30 - 15", "resultadoEsperado": 15 },
         { "pregunta": "6 * 7", "resultadoEsperado": 42 },
         { "pregunta": "100 / 10", "resultadoEsperado": 10 }
+    ],
+
+    "quiz": [
+        {
+            "pregunta": "¿Cuál es la capital de España?",
+            "opciones": ["Barcelona", "Lisboa", "Madrid"],
+            "indiceRespuestaCorrecta": 2
+        },
+        {
+            "pregunta": "¿Qué animal dice 'mu'?",
+            "opciones": ["El perro", "La vaca", "El gato"],
+            "indiceRespuestaCorrecta": 1
+        },
+        {
+            "pregunta": "¿Cuál es el planeta más grande de nuestro sistema solar?",
+            "opciones": ["Tierra", "Júpiter", "Marte"],
+            "indiceRespuestaCorrecta": 1
+        },
+        {
+            "pregunta": "Si tienes 3 manzanas y te comes una, ¿cuántas te quedan?",
+            "opciones": ["Una", "Dos", "Tres"],
+            "indiceRespuestaCorrecta": 1
+        },
+        {
+            "pregunta": "¿Cuál de estos colores no está en el arcoíris?",
+            "opciones": ["Verde", "Naranja", "Marrón"],
+            "indiceRespuestaCorrecta": 2
+        },
+        {
+            "pregunta": "¿Cuántas horas tiene un día?",
+            "opciones": ["24", "8", "20"],
+            "indiceRespuestaCorrecta": 0
+        },
+        {
+            "pregunta": "¿Cuántas patas tiene una araña?",
+            "opciones": ["6", "8", "10"],
+            "indiceRespuestaCorrecta": 1
+        }
     ]
+
+
 
 }
