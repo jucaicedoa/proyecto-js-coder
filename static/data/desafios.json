@@ -1,8 +1,26 @@
 {
-    "memoria": {
-        "secuencia": ["A", "M", "A", "R", "I", "L", "L", "O"],
-        "tiempo": 5000
-    },
+    "memoria": [
+        {
+            "tipo": "letras",
+            "secuencia": ["V", "E", "R", "D", "E"],
+            "tiempo": 4000
+        },
+        {
+            "tipo": "numeros",
+            "secuencia": ["8", "1", "5", "9", "3", "7"],
+            "tiempo": 5000
+        },
+        {
+            "tipo": "palabras",
+            "secuencia": ["CASA", "ARBOL", "SOL", "PEZ"],
+            "tiempo": 6000
+        },
+        {
+            "tipo": "letras",
+            "secuencia": ["A", "Z", "U", "L"],
+            "tiempo": 4000
+        }
+    ],
     "operaciones": [
         { "pregunta": "7 + 6", "resultadoEsperado": 13 },
         { "pregunta": "18 - 9", "resultadoEsperado": 9 },
