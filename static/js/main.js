@@ -170,14 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Desafíos
 
     function iniciarDesafioMemoria() {
-    
     const RONDAS_DE_JUEGO = 3;
     let rondaActual = 0;
     let aciertos = 0;
 
     const desafiosMezclados = [...datosDeTodosLosDesafios.memoria].sort(() => 0.5 - Math.random());
     const desafiosParaLaPartida = desafiosMezclados.slice(0, RONDAS_DE_JUEGO);
-    //Controla la ronda
+
     function jugarRonda() {
         if (rondaActual >= RONDAS_DE_JUEGO) {
             mostrarResultado(aciertos, RONDAS_DE_JUEGO, "Memoria");
@@ -187,11 +186,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const desafioActual = desafiosParaLaPartida[rondaActual];
         const { tipo, secuencia, tiempo } = desafioActual;
 
-        let separador = (tipo === 'palabras' || tipo === 'colores' || tipo=== 'formas') ? ' ' : '';
-        let placeholder = (tipo === 'palabras' || tipo === 'colores' || tipo=== 'formas') ? 'PALABRA1 PALABRA2' : 'ABCD';
+        let separador = (tipo === 'palabras' || tipo === 'colores' || tipo === 'formas') ? ' ' : '';
+        let placeholder = (tipo === 'palabras' || tipo === 'colores' || tipo === 'formas') ? 'PALABRA1 PALABRA2' : 'ABCD';
         let instruccion = `Ronda ${rondaActual + 1} de ${RONDAS_DE_JUEGO}: Memoriza la secuencia de ${tipo}.`;
     
-            contenidoDesafio.innerHTML = `
+        contenidoDesafio.innerHTML = `
             <p>${instruccion}</p>
             <div class="sequence-display">${secuencia.join(separador)}</div>
             <p>¡Tienes ${tiempo / 1000} segundos!</p>
@@ -209,8 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.getElementById('verificar-desafio').onclick = () => {
                 const inputUsuario = document.getElementById('secuencia-usuario').value.toUpperCase();
-                const respuestaUsuario = (tipo === 'palabras' || tipo === 'colores' || tipo=== 'formas' || tipo=== 'numeros') ? inputUsuario.split(' ') : inputUsuario.split('');                
-                // Comparar respuesta
+                const respuestaUsuario = (tipo === 'palabras' || tipo === 'colores' || tipo === 'formas') ? inputUsuario.split(' ') : inputUsuario.split('');
                 const esCorrecto = JSON.stringify(respuestaUsuario) === JSON.stringify(secuencia);
                 
                 if (esCorrecto) {
@@ -220,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     mostrarNotificacion("Incorrecto.", "error");
                 }
                 
-                //siguiente ronda
                 rondaActual++;
                 
                 setTimeout(jugarRonda, 1200); 
