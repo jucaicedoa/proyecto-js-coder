@@ -312,32 +312,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function mostrarReporte() {
-        navegarHacia('reporte');
-        const reporteContenido = document.getElementById('reporte-final-contenido');
-        
-        if (puntajesDeSesion.length === 0) {
-            reporteContenido.innerHTML = `<h3>Reporte de ${usuarioActual}</h3><p>No completaste ningún desafío en esta sesión. ¡Juega una ronda para ver tu reporte!</p>`;
-            return;
-        }
-
-        let totalAciertos = 0;
-        let totalPosibles = 0;
-        
-        for(const puntaje of puntajesDeSesion) {
-            totalAciertos += puntaje.puntaje;
-            totalPosibles += puntaje.total;
-        }
-
-        const listaResultadosHTML = puntajesDeSesion.map(p => `<li>${p.desafio}: ${p.puntaje}/${p.total}</li>`).join('');
-
+    navegarHacia('reporte');
+    const reporteContenido = document.getElementById('reporte-final-contenido');
+    
+    if (puntajesDeSesion.length === 0) {
         reporteContenido.innerHTML = `
+            <img src="./static/img/logo-edukids.ico" alt="logo edukids" />
             <h3>Reporte de ${usuarioActual}</h3>
-            <p>Aquí está tu resumen de esta sesión:</p>
-            <ul>${listaResultadosHTML}</ul>
-            <hr>
-            <p><strong>Puntaje Total de la Sesión: ${totalAciertos} de ${totalPosibles} correctas.</strong></p>
+            <p>No completaste ningún desafío en esta sesión. ¡Juega una ronda para ver tu reporte!</p>
         `;
+        return;
     }
+
+    let totalAciertos = 0;
+    let totalPosibles = 0;
+    
+    for(const puntaje of puntajesDeSesion) {
+        totalAciertos += puntaje.puntaje;
+        totalPosibles += puntaje.total;
+    }
+
+    const listaResultadosHTML = puntajesDeSesion.map(p => `<li>${p.desafio}: ${p.puntaje}/${p.total}</li>`).join('');
+
+    reporteContenido.innerHTML = `
+        <img src="./static/img/logo-edukids.ico" alt="logo edukids" />
+        <h3>Reporte de ${usuarioActual}</h3>
+        <p>Aquí está tu resumen de esta sesión:</p>
+        <ul>${listaResultadosHTML}</ul>
+        <hr>
+        <p><strong>Puntaje Total de la Sesión: ${totalAciertos} de ${totalPosibles} correctas.</strong></p>
+    `;
+}
 
     botonLimpiarHistorial.addEventListener('click', () => {
         Swal.fire({
