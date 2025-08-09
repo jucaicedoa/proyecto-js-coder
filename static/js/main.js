@@ -170,15 +170,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // Desafíos
 
     function iniciarDesafioMemoria() {
-        const desafiosMemoria = datosDeTodosLosDesafios.memoria;
-        const desafioActual = desafiosMemoria[Math.floor(Math.random() * desafiosMemoria.length)];
+    
+    const RONDAS_DE_JUEGO = 3;
+    let rondaActual = 0;
+    let aciertos = 0;
+
+    const desafiosMezclados = [...datosDeTodosLosDesafios.memoria].sort(() => 0.5 - Math.random());
+    const desafiosParaLaPartida = desafiosMezclados.slice(0, RONDAS_DE_JUEGO);
+    //Controla la ronda
+    function jugarRonda() {
+        if (rondaActual >= RONDAS_DE_JUEGO) {
+            mostrarResultado(aciertos, RONDAS_DE_JUEGO, "Memoria");
+            return;
+        }
+
+        const desafioActual = desafiosParaLaPartida[rondaActual];
         const { tipo, secuencia, tiempo } = desafioActual;
 
-        let separador = (tipo === 'palabras') ? ' ' : '';
-        let placeholder = (tipo === 'palabras') ? 'PALABRA1 PALABRA2' : 'ABCD';
-        let instruccion = `Memoriza esta secuencia de ${tipo}:`;
-
-        contenidoDesafio.innerHTML = `
+        let separador = (tipo === 'palabras' || tipo === 'colores') ? ' ' : '';
+        let placeholder = (tipo === 'palabras' || tipo === 'colores') ? 'PALABRA1 PALABRA2' : 'ABCD';
+        let instruccion = `Ronda ${rondaActual + 1} de ${RONDAS_DE_JUEGO}: Memoriza la secuencia de ${tipo}.`;
+    
+            contenidoDesafio.innerHTML = `
             <p>${instruccion}</p>
             <div class="sequence-display">${secuencia.join(separador)}</div>
             <p>¡Tienes ${tiempo / 1000} segundos!</p>
@@ -186,94 +199,135 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             contenidoDesafio.innerHTML = `
+                <p class="ronda-info">Ronda ${rondaActual + 1} de ${RONDAS_DE_JUEGO}</p>
                 <p>Escribe la secuencia que memorizaste:</p>
-                <input type="text" id="secuencia-usuario" placeholder="Ej: ${placeholder}">
+                <input type="text" id="secuencia-usuario" placeholder="Ej: ${placeholder}" autocomplete="off">
                 <button id="verificar-desafio">Verificar</button>
             `;
+
+            document.getElementById('secuencia-usuario').focus();
+            
             document.getElementById('verificar-desafio').onclick = () => {
                 const inputUsuario = document.getElementById('secuencia-usuario').value.toUpperCase();
-                const respuestaUsuario = (tipo === 'palabras') ? inputUsuario.split(' ') : inputUsuario.split('');
+                const respuestaUsuario = (tipo === 'palabras' || tipo === 'colores') ? inputUsuario.split(' ') : inputUsuario.split('');                
+                // Comparar respuesta
+                const esCorrecto = JSON.stringify(respuestaUsuario) === JSON.stringify(secuencia);
                 
-                const acierto = JSON.stringify(respuestaUsuario) === JSON.stringify(secuencia) ? 1 : 0;
+                if (esCorrecto) {
+                    aciertos++;
+                    mostrarNotificacion("¡Correcto!", "exito");
+                } else {
+                    mostrarNotificacion("Incorrecto.", "error");
+                }
                 
-                mostrarResultado(acierto, 1, "Memoria");
+                //siguiente ronda
+                rondaActual++;
+                
+                setTimeout(jugarRonda, 1200); 
             };
         }, tiempo);
     }
+    jugarRonda();
+}
 
     function iniciarDesafioOperaciones() {
-        const operaciones = datosDeTodosLosDesafios.operaciones;
-        let indicePregunta = 0;
-        let respuestasCorrectas = 0;
+  
+    const RONDAS_DE_JUEGO = 5;
+    let rondaActual = 0;
+    let aciertos = 0;
 
-        function proximaPregunta() {
-            if (indicePregunta < operaciones.length) {
-                const op = operaciones[indicePregunta];
-                contenidoDesafio.innerHTML = `
-                    <p>Resuelve: <strong>${op.pregunta}</strong></p>
-                    <input type="number" id="respuesta-usuario" placeholder="Tu respuesta">
-                    <button id="responder">Responder</button>
-                `;
-                document.getElementById('responder').onclick = () => {
-                    const respuesta = parseInt(document.getElementById('respuesta-usuario').value);
-                    if (respuesta === op.resultadoEsperado) {
-                        respuestasCorrectas++;
-                        mostrarNotificacion("¡Correcto!", "exito");
-                    } else {
-                        mostrarNotificacion(`Incorrecto. La respuesta era ${op.resultadoEsperado}`, "error");
-                    }
-                    indicePregunta++;
-                    setTimeout(proximaPregunta, 1000);
-                };
-            } else {
-                mostrarResultado(respuestasCorrectas, operaciones.length, "Operaciones");
-            }
+    const operacionesMezcladas = [...datosDeTodosLosDesafios.operaciones].sort(() => 0.5 - Math.random());
+    const operacionesParaLaPartida = operacionesMezcladas.slice(0, RONDAS_DE_JUEGO);
+
+    //controla pregunta
+    function proximaPregunta() {
+       
+        if (rondaActual >= RONDAS_DE_JUEGO) {
+            mostrarResultado(aciertos, RONDAS_DE_JUEGO, "Operaciones");
+            return;
         }
-        proximaPregunta();
+
+        const op = operacionesParaLaPartida[rondaActual];
+        
+        contenidoDesafio.innerHTML = `
+            <p class="ronda-info">Operación ${rondaActual + 1} de ${RONDAS_DE_JUEGO}</p>
+            <p>Resuelve: <strong>${op.pregunta}</strong></p>
+            <input type="number" id="respuesta-usuario" placeholder="Tu respuesta" autocomplete="off">
+            <button id="responder">Responder</button>
+        `;
+
+        document.getElementById('respuesta-usuario').focus();
+
+        document.getElementById('responder').onclick = () => {
+            const respuesta = parseInt(document.getElementById('respuesta-usuario').value);
+            if (respuesta === op.resultadoEsperado) {
+                aciertos++;
+                mostrarNotificacion("¡Correcto!", "exito");
+            } else {
+                mostrarNotificacion(`Incorrecto. La respuesta era ${op.resultadoEsperado}`, "error");
+            }
+            
+            // siguiente pregunta
+            rondaActual++;
+            setTimeout(proximaPregunta, 1200);
+        };
     }
+
+    proximaPregunta();
+}
     
     function iniciarDesafioQuiz() {
-        const preguntas = datosDeTodosLosDesafios.quiz;
-        let indicePregunta = 0;
-        let respuestasCorrectas = 0;
+  
+    const RONDAS_DE_JUEGO = 5;
+    let rondaActual = 0;
+    let aciertos = 0;
+
+    const preguntasMezcladas = [...datosDeTodosLosDesafios.quiz].sort(() => 0.5 - Math.random());
+    const preguntasParaLaPartida = preguntasMezcladas.slice(0, RONDAS_DE_JUEGO);
+
     
-        function presentarPregunta() {
-            if (indicePregunta < preguntas.length) {
-                const preguntaActual = preguntas[indicePregunta];
-                const opcionesHTML = preguntaActual.opciones.map((opcion, i) => `
-                    <label>
-                        <input type="radio" name="opcion-quiz" value="${i}">
-                        <span>${opcion}</span>
-                    </label>
-                `).join('');
-    
-                contenidoDesafio.innerHTML = `
-                    <p>${preguntaActual.pregunta}</p>
-                    <div class="quiz-options">${opcionesHTML}</div>
-                    <button id="responder-quiz">Responder</button>
-                `;
-    
-                document.getElementById('responder-quiz').onclick = () => {
-                    const opcionSeleccionada = document.querySelector('input[name="opcion-quiz"]:checked');
-                    if (!opcionSeleccionada) {
-                        mostrarNotificacion("Debes seleccionar una opción", "aviso");
-                        return;
-                    }
-                    if (parseInt(opcionSeleccionada.value) === preguntaActual.indiceRespuestaCorrecta) {
-                        respuestasCorrectas++;
-                        mostrarNotificacion("¡Correcto!", "exito");
-                    } else {
-                        mostrarNotificacion(`Incorrecto. La respuesta es: ${preguntaActual.opciones[preguntaActual.indiceRespuestaCorrecta]}`, "error");
-                    }
-                    indicePregunta++;
-                    setTimeout(presentarPregunta, 1200);
-                };
-            } else {
-                mostrarResultado(respuestasCorrectas, preguntas.length, "Quiz");
-            }
+    function presentarPregunta() {
+       
+        if (rondaActual >= RONDAS_DE_JUEGO) {
+            mostrarResultado(aciertos, RONDAS_DE_JUEGO, "Quiz");
+            return;
         }
-        presentarPregunta();
+
+        const preguntaActual = preguntasParaLaPartida[rondaActual];
+        const opcionesHTML = preguntaActual.opciones.map((opcion, i) => `
+            <label>
+                <input type="radio" name="opcion-quiz" value="${i}">
+                <span>${opcion}</span>
+            </label>
+        `).join('');
+
+        contenidoDesafio.innerHTML = `
+            <p class="ronda-info">Pregunta ${rondaActual + 1} de ${RONDAS_DE_JUEGO}</p>
+            <p>${preguntaActual.pregunta}</p>
+            <div class="quiz-options">${opcionesHTML}</div>
+            <button id="responder-quiz">Responder</button>
+        `;
+
+        document.getElementById('responder-quiz').onclick = () => {
+            const opcionSeleccionada = document.querySelector('input[name="opcion-quiz"]:checked');
+            if (!opcionSeleccionada) {
+                mostrarNotificacion("Debes seleccionar una opción", "aviso");
+                return;
+            }
+            if (parseInt(opcionSeleccionada.value) === preguntaActual.indiceRespuestaCorrecta) {
+                aciertos++;
+                mostrarNotificacion("¡Correcto!", "exito");
+            } else {
+                mostrarNotificacion(`Incorrecto. La respuesta es: ${preguntaActual.opciones[preguntaActual.indiceRespuestaCorrecta]}`, "error");
+            }
+            //siguiente ronda
+            rondaActual++;
+            setTimeout(presentarPregunta, 1200);
+        };
     }
+
+    presentarPregunta();
+}
 
     function iniciarDesafioAdivinarPalabra() {
         const listaDePalabras = datosDeTodosLosDesafios.adivinaLaPalabra;
