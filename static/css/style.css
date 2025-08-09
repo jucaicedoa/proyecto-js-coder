@@ -152,6 +152,12 @@ input:focus {
     border-color: var(--naranja-principal);
 }
 
+#contenido-desafio .ronda-info {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--naranja-principal);
+    margin-bottom: 10px;
+}
 .quiz-options label {
     display: block;
     margin: 10px 0;
