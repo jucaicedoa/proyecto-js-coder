@@ -22,15 +22,14 @@
             <button id="btn-iniciar">Empezar a Jugar</button>
         </section>
 
-        <section id="menu-seccion" style="display: none;">
-            <h2>Selecciona un Desafío:</h2>
-            <div class="menu-opciones">
-                <button data-challenge="memoria">1. Memoria</button>
-                <button data-challenge="operaciones">2. Operaciones</button>
-                <button data-challenge="quiz">3. Quiz</button>
-                <button data-challenge="adivinaLaPalabra">4. Adivina la palabra</button>
-            </div>
-            <div class="acciones-menu">
+        <section id="seccion-menu" style="display: none;">
+    <h2>Selecciona un Desafío:</h2>
+    <div class="menu-opciones">
+        <button data-challenge="memoria">1. Memoria</button>
+        <button data-challenge="operaciones">2. Operaciones</button>
+        <button data-challenge="quiz">3. Quiz</button>
+        <button data-challenge="adivinaLaPalabra">4. Adivina la palabra</button>
+        <div class="acciones-menu">
                 <button id="btn-finalizar-sesion">Finalizar y Ver Reporte</button>
                 <button id="btn-limpiar-historial">Borrar Historial</button>
             </div>
@@ -40,7 +39,10 @@
                     <li>No hay puntajes guardados aún.</li>
                 </ul>
             </div>
-        </section>
+    </div>
+            
+      
+</section>
 
         <section id="seccion-desafio" style="display: none;">
             <h2 id="desafio-titulo"></h2>
@@ -58,7 +60,6 @@
     <footer>
         <p>&copy; 2025 Edukids. Todos los derechos reservados.</p>
     </footer>
-
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 </html>
