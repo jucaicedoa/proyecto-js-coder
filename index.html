@@ -4,46 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edukids - Plataforma Educativa</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="./static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+     <link
+      rel="icon"
+      href="./static/img/logo-edukids-ventana.ico"
+      type="image/ico"
+    />
     <script defer src="./static/js/main.js"></script>
 </head>
 <body>
     <header>
-        <h1>Bienvenido a Edukids</h1>
+        <img src="./static/img/logo-edukids.ico" alt="logo edukids" />
+        <h1 id="header-title">Bienvenido a Edukids</h1>
         <p>Una plataforma para apoyar el aprendizaje de niños en memoria, lógica, cultura y lenguaje.</p>
     </header>
 
     <main>
-        <section id="menu-seccion">
+        <section id="seccion-login">
+            <h2>¡Hola! ¿Cómo te llamas?</h2>
+            <input type="text" id="nombre-usuario" placeholder="Escribe tu nombre aquí" autocomplete="off">
+            <button id="btn-iniciar">Empezar a Jugar</button>
+        </section>
+
+        <section id="seccion-menu" style="display: none;">
             <h2>Selecciona un Desafío:</h2>
             <div class="menu-opciones">
-                <button id="btn-desafio1" data-challenge="1">1. Memoria</button>
-                <button id="btn-desafio2" data-challenge="2">2. Operaciones</button>
-                <button id="btn-desafio3" data-challenge="3">3. Quiz</button>
-                <button id="btn-desafio4" data-challenge="4">4. Adivina la palabra</button>
+                <button data-challenge="memoria">1. Memoria</button>
+                <button data-challenge="operaciones">2. Operaciones</button>
+                <button data-challenge="quiz">3. Quiz</button>
+                <button data-challenge="adivinaLaPalabra">4. Adivina la palabra</button>
             </div>
-            <button id="btn-limpiar-score">Borrar Puntaje</button>
-            <p class="mensaje-salir">Para salir, cierra la pestaña.</p>
-
+            <div class="acciones-menu">
+                <button id="btn-finalizar-sesion">Finalizar y Ver Reporte</button>
+                <button id="btn-limpiar-historial">Borrar Historial</button>
+            </div>
             <div class="scores-tabla">
-                <h3>Puntajes Guardados:</h3>
+                <h3>Historial de Puntajes:</h3>
                 <ul id="score-lista">
-                    </ul>
+                    <li>No hay puntajes guardados aún.</li>
+                </ul>
             </div>
         </section>
 
         <section id="seccion-desafio" style="display: none;">
             <h2 id="desafio-titulo"></h2>
-            <div id="contenido-desafio">
-                </div>
+            <div id="contenido-desafio"></div>
             <button id="btn-volver-menu">Volver al Menú</button>
         </section>
 
-        </main>
+        <section id="seccion-reporte" style="display: none;">
+            <h2>¡Gran Trabajo!</h2>
+            <div id="reporte-final-contenido"></div>
+            <button id="btn-jugar-otra-vez">Jugar de Nuevo</button>
+        </section>
+    </main>
 
     <footer>
-        <p>&copy; 2025 Edukids. Todos los derechos reservados.</p>
+        <p>&copy; 2025 Edukids - <a href="https://linkedin.com/in/jucaicedoa" target="_blank">jucaicedoa</a>. Todos los derechos reservados.</p>
     </footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 </html>
