@@ -186,10 +186,27 @@ input[type="text"], input[type="number"] {
     color: #34244d;
     padding: 20px;
     border-radius: 8px;
-    text-align: left;
+    text-align: center;
 }
+
+#reporte-final-contenido img {
+    width: 12rem; 
+    height: 5rem;
+    margin-bottom: 15px; 
+}
+
 #reporte-final-contenido h3 {
     color: #34244d;
+    text-align: center;
+}
+
+#reporte-final-contenido ul {
+    text-align: left; 
+    display: inline-block;
+    margin: 0 auto;
+}
+
+#reporte-final-contenido p {
     text-align: center;
 }
 
