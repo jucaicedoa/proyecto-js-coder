@@ -20,12 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonJugarOtraVez = document.getElementById('btn-jugar-otra-vez');
     const botonesDelMenu = document.querySelectorAll('.menu-opciones button');
 
-
-    /**
-     * Notificación en pantalla usando Toastify
-     * @param {string} texto El mensaje a mostrar
-     * @param {string} tipo  exito(verde),error(rojo), aviso(azul)
-     */
+    // notificaciones con TOASTIFY
     function mostrarNotificacion(texto, tipo = 'aviso') {
         const colores = {
             exito: "linear-gradient(to right, #00b09b, #96c93d)",
@@ -37,33 +32,47 @@ document.addEventListener('DOMContentLoaded', () => {
             text: texto,
             duration: 3000,
             close: true,
-            gravity: "top", 
-            position: "right", 
+            gravity: "top",
+            position: "right",
             stopOnFocus: true,
             style: {
                 background: colores[tipo] || colores['aviso'],
             },
         }).showToast();
     }
-
-    //Carga de datos con fetch
-    async function cargarDatos() {
-        try {
-            const respuesta = await fetch('./static/data/desafios.json');
-            if (!respuesta.ok) throw new Error(`Error HTTP: ${respuesta.status}`);
-            datosDeTodosLosDesafios = await respuesta.json();
-        } catch (error) {
-            console.error("No se pudieron cargar los datos de los desafíos:", error);
-            mostrarNotificacion("Error al cargar los desafíos.", "error");
-        }
-    }
-
-    async function iniciarAplicacion() {
-        await cargarDatos();
-        mostrarPuntajes();
-        botonIniciar.addEventListener('click', iniciarSesion);
-        inputNombreUsuario.addEventListener('keyup', (evento) => {
-            if (evento.key === 'Enter') iniciarSesion();
+    
+    //Cargar datos e inicio apicación
+    function iniciarAplicacion() {
+        fetch('./data/desafios.json')
+            .then(respuesta => {
+            
+                if (!respuesta.ok) {
+            
+                    throw new Error(`Error HTTP: ${respuesta.status}`);
+                }
+                // Si la respuesta es correcta, se convierte en JSON
+                return respuesta.json();
+            })
+            .then(data => {
+                // Datos en variable local
+                datosDeTodosLosDesafios = data;
+                
+                // Iniciar aplicación 
+                mostrarPuntajes();
+                botonIniciar.addEventListener('click', iniciarSesion);
+                inputNombreUsuario.addEventListener('keyup', (evento) => {
+                    if (evento.key === 'Enter') iniciarSesion();
+                });
+            })
+            .catch(error => {
+          
+                console.error("No se pudieron cargar los datos de los desafíos:", error);
+                mostrarNotificacion("Error al cargar los juegos.", "error");
+            })
+            .finally(() => {
+          
+            console.log("Proceso de carga de datos finalizado.");
+          
         });
     }
 
@@ -158,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Desafíos
 
     function iniciarDesafioMemoria() {
         const desafiosMemoria = datosDeTodosLosDesafios.memoria;
@@ -213,7 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         mostrarNotificacion(`Incorrecto. La respuesta era ${op.resultadoEsperado}`, "error");
                     }
                     indicePregunta++;
-                    
                     setTimeout(proximaPregunta, 1000);
                 };
             } else {
@@ -330,9 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-
     botonLimpiarHistorial.addEventListener('click', () => {
-     
         Swal.fire({
             title: '¿Estás seguro?',
             text: "¡Esto borrará todo el historial de puntajes permanentemente!",
@@ -367,6 +374,5 @@ document.addEventListener('DOMContentLoaded', () => {
         navegarHacia('menu');
     });
 
-   
     iniciarAplicacion();
 });
