@@ -1,27 +1,20 @@
 {
     "memoria": [
-        {
-            "tipo": "letras",
-            "secuencia": ["V", "E", "R", "D", "E"],
-            "tiempo": 4000
-        },
-        {
-            "tipo": "numeros",
-            "secuencia": ["8", "1", "5", "9", "3", "7"],
-            "tiempo": 5000
-        },
-        {
-            "tipo": "palabras",
-            "secuencia": ["CASA", "ARBOL", "SOL", "PEZ"],
-            "tiempo": 6000
-        },
-        {
-            "tipo": "letras",
-            "secuencia": ["A", "Z", "U", "L"],
-            "tiempo": 4000
-        }
+        { "tipo": "letras", "secuencia": ["V", "T", "R", "S", "E"], "tiempo": 4000 },
+        { "tipo": "numeros", "secuencia": ["8", "1", "5", "9", "3", "7"], "tiempo": 5000 },
+        { "tipo": "palabras", "secuencia": ["CASA", "ARBOL", "SOL", "PEZ"], "tiempo": 6000 },
+        { "tipo": "letras", "secuencia": ["V", "M", "U", "P", "D"], "tiempo": 4000 },
+        { "tipo": "colores", "secuencia": ["ROJO", "AZUL", "VERDE"], "tiempo": 5000 },
+        { "tipo": "numeros", "secuencia": ["4", "8", "3", "7", "2"], "tiempo": 5000 },
+        { "tipo": "palabras", "secuencia": ["GATO", "LUNA", "AGUA"], "tiempo": 5000 },
+        { "tipo": "letras", "secuencia": ["L", "O", "B", "O"], "tiempo": 4000 },
+        { "tipo": "formas", "secuencia": ["CIRCULO", "TRIANGULO"], "tiempo": 6000 },
+        { "tipo": "colores", "secuencia": ["AMARILLO", "BLANCO", "NEGRO"], "tiempo": 6000 },
+        { "tipo": "numeros", "secuencia": ["10", "20", "30", "40"], "tiempo": 5000 },
+        { "tipo": "palabras", "secuencia": ["MANO", "PIE", "OJO", "LUZ"], "tiempo": 6000 },
+        { "tipo": "letras", "secuencia": ["P", "T", "M", "O"], "tiempo": 4000 },
+        { "tipo": "formas", "secuencia": ["CIRCULO", "CUADRADO", "TRIANGULO"], "tiempo": 6000 }
     ],
-
     "operaciones": [
         { "pregunta": "7 + 6", "resultadoEsperado": 13 },
         { "pregunta": "18 - 9", "resultadoEsperado": 9 },
@@ -30,75 +23,51 @@
         { "pregunta": "9 + 8", "resultadoEsperado": 17 },
         { "pregunta": "30 - 15", "resultadoEsperado": 15 },
         { "pregunta": "6 * 7", "resultadoEsperado": 42 },
-        { "pregunta": "100 / 10", "resultadoEsperado": 10 }
+        { "pregunta": "100 / 10", "resultadoEsperado": 10 },
+        { "pregunta": "10 + 10", "resultadoEsperado": 20 },
+        { "pregunta": "25 - 8", "resultadoEsperado": 17 },
+        { "pregunta": "8 + 2", "resultadoEsperado": 10 },
+        { "pregunta": "15 / 3", "resultadoEsperado": 5 },
+        { "pregunta": "12 + 9", "resultadoEsperado": 21 },
+        { "pregunta": "50 - 25", "resultadoEsperado": 25 },
+        { "pregunta": "9 * 4", "resultadoEsperado": 36 },
+        { "pregunta": "30 / 5", "resultadoEsperado": 6 },
+        { "pregunta": "13 + 8", "resultadoEsperado": 21 },
+        { "pregunta": "22 - 11", "resultadoEsperado": 11 },
+        { "pregunta": "8 - 7", "resultadoEsperado": 1 },
+        { "pregunta": "45 / 9", "resultadoEsperado": 5 }
     ],
-
     "quiz": [
-        {
-            "pregunta": "¿Cuál es la capital de España?",
-            "opciones": ["Barcelona", "Lisboa", "Madrid"],
-            "indiceRespuestaCorrecta": 2
-        },
-        {
-            "pregunta": "¿Qué animal dice 'mu'?",
-            "opciones": ["El perro", "La vaca", "El gato"],
-            "indiceRespuestaCorrecta": 1
-        },
-        {
-            "pregunta": "¿Cuál es el planeta más grande de nuestro sistema solar?",
-            "opciones": ["Tierra", "Júpiter", "Marte"],
-            "indiceRespuestaCorrecta": 1
-        },
-        {
-            "pregunta": "Si tienes 3 manzanas y te comes una, ¿cuántas te quedan?",
-            "opciones": ["Una", "Dos", "Tres"],
-            "indiceRespuestaCorrecta": 1
-        },
-        {
-            "pregunta": "¿Cuál de estos colores no está en el arcoíris?",
-            "opciones": ["Verde", "Naranja", "Marrón"],
-            "indiceRespuestaCorrecta": 2
-        },
-        {
-            "pregunta": "¿Cuántas horas tiene un día?",
-            "opciones": ["24", "8", "20"],
-            "indiceRespuestaCorrecta": 0
-        },
-        {
-            "pregunta": "¿Cuántas patas tiene una araña?",
-            "opciones": ["6", "8", "10"],
-            "indiceRespuestaCorrecta": 1
-        }
+        { "pregunta": "¿Cuál es la capital de España?", "opciones": ["Barcelona", "Lisboa", "Madrid"], "indiceRespuestaCorrecta": 2 },
+        { "pregunta": "¿Qué animal dice 'mu'?", "opciones": ["El perro", "La vaca", "El gato"], "indiceRespuestaCorrecta": 1 },
+        { "pregunta": "¿Cuál es el planeta más grande de nuestro sistema solar?", "opciones": ["Tierra", "Júpiter", "Marte"], "indiceRespuestaCorrecta": 1 },
+        { "pregunta": "Si tienes 3 manzanas y te comes una, ¿cuántas te quedan?", "opciones": ["Una", "Dos", "Tres"], "indiceRespuestaCorrecta": 1 },
+        { "pregunta": "¿Cuál de estos colores no está en el arcoíris?", "opciones": ["Verde", "Naranja", "Marrón"], "indiceRespuestaCorrecta": 2 },
+        { "pregunta": "¿Cuántas horas tiene un día?", "opciones": ["24", "8", "20"], "indiceRespuestaCorrecta": 0 },
+        { "pregunta": "¿Cuántas patas tiene una araña?", "opciones": ["6", "8", "10"], "indiceRespuestaCorrecta": 1 },
+        { "pregunta": "¿En qué se convierte el agua cuando se congela?", "opciones": ["Vapor", "Hielo", "Arena"], "indiceRespuestaCorrecta": 1 },
+        { "pregunta": "¿Cuál es el color que NO está en la bandera de Colombia?", "opciones": ["Amarillo", "Azul", "Verde"], "indiceRespuestaCorrecta": 2 },
+        { "pregunta": "¿Qué usan las plantas para fabricar su propio alimento?", "opciones": ["La luna", "La luz del sol", "El viento"], "indiceRespuestaCorrecta": 1 },
+        { "pregunta": "¿Cuál de estas letras es una vocal?", "opciones": ["B", "E", "P"], "indiceRespuestaCorrecta": 1 },
+        { "pregunta": "¿Cuál es la capital de Francia?", "opciones": ["Roma", "Londres", "París"], "indiceRespuestaCorrecta": 2 },
+        { "pregunta": "¿Cuántos dedos tenemos en una mano?", "opciones": ["Cinco", "Diez", "Seis"], "indiceRespuestaCorrecta": 0 },
+        { "pregunta": "¿Qué animal vuela y construye nidos?", "opciones": ["El pez", "El pájaro", "El perro"], "indiceRespuestaCorrecta": 1 },
+        { "pregunta": "¿Cuál es el océano más grande del mundo?", "opciones": ["Atlántico", "Índico", "Pacífico"], "indiceRespuestaCorrecta": 2 },
+        { "pregunta": "¿Cuántos lados tiene un cuadrado?", "opciones": ["Tres", "Cuatro", "Cinco"], "indiceRespuestaCorrecta": 1 },
+        { "pregunta": "Si mezclas amarillo y azul, ¿qué color obtienes?", "opciones": ["Rojo", "Naranja", "Verde"], "indiceRespuestaCorrecta": 2 }
     ],
-
-    "adivinaLaPalabra": [
-        {
-            "palabraSecreta": "GUITARRA",
-            "pistas": [
-                "Soy un instrumento musical.",
-                "Tengo cuerdas.",
-                "Me usan en muchos tipos de música, como el rock y el bolero."
-            ],
-            "intentosMaximos": 3
-        },
-        {
-            "palabraSecreta": "BICICLETA",
-            "pistas": [
-                "Tengo dos ruedas.",
-                "No necesito gasolina para moverme.",
-                "Te ayudo a hacer ejercicio al aire libre."
-            ],
-            "intentosMaximos": 3
-        },
-        {
-            "palabraSecreta": "SOL",
-            "pistas": [
-                "Soy una estrella gigante.",
-                "Doy luz y calor a la Tierra.",
-                "Por la noche, no me puedes ver."
-            ],
-            "intentosMaximos": 3
-        }
-    ]
-
+   "adivinaLaPalabra": [
+    { "palabraSecreta": "GUITARRA", "pistas": ["Soy un instrumento musical.", "Tengo cuerdas.", "Me usan en muchos tipos de música."], "intentosMaximos": 3 },
+    { "palabraSecreta": "BICICLETA", "pistas": ["Tengo dos ruedas.", "No necesito gasolina para moverme.", "Te ayudo a hacer ejercicio."], "intentosMaximos": 3 },
+    { "palabraSecreta": "ABUELA", "pistas": ["Tiene muchos años de edad", " Es la mamá de mamá", "Le gusta enseñar"], "intentosMaximos": 3 },
+    { "palabraSecreta": "LEÓN", "pistas": ["Me llaman 'El Rey de la Selva'.", "Tengo una gran melena.", "Mi rugido es muy fuerte."], "intentosMaximos": 3 },
+    { "palabraSecreta": "LÁPIZ", "pistas": ["Me usas para escribir o dibujar.", "Estoy hecho de madera y grafito.", "Necesito un sacapuntas."], "intentosMaximos": 3 },
+    { "palabraSecreta": "MAMÁ", "pistas": ["Te cuida con mucho amor.", "Te da los mejores abrazos.", "Celebramos su día especial en mayo."], "intentosMaximos": 3 },
+    { "palabraSecreta": "PAPÁ", "pistas": ["Es el esposo de mamá.", "Te enseña a jugar y a ser valiente.", "También tiene un día especial para celebrar."], "intentosMaximos": 3 },
+    { "palabraSecreta": "ÁRBOL", "pistas": ["Tengo un tronco y muchas ramas.", "En mis hojas a veces viven los pajaritos.", "Doy sombra en los días de sol."], "intentosMaximos": 3 },
+    { "palabraSecreta": "RATÓN", "pistas": ["Soy un animal pequeño que ama el queso.", "Le tengo miedo a los gatos.", "Mickey es el más famoso de mi especie."], "intentosMaximos": 3 },
+    { "palabraSecreta": "SOL", "pistas": ["Soy una estrella gigante.", "Doy luz y calor a la Tierra.", "Por la noche, no me puedes ver."], "intentosMaximos": 3 },
+    { "palabraSecreta": "LUNA", "pistas": ["Aparezco en el cielo por la noche.", "A veces soy redonda y a veces una sonrisa.", "Reflejo la luz del sol."], "intentosMaximos": 3 },
+    { "palabraSecreta": "LIBRO", "pistas": ["Tengo muchas hojas llenas de letras.", "Cuento historias o enseño cosas.", "Me puedes encontrar en una biblioteca."], "intentosMaximos": 3 }
+]
 }
