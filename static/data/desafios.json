@@ -1,0 +1,17 @@
+{
+    "memoria": {
+        "secuencia": ["A", "M", "A", "R", "I", "L", "L", "O"],
+        "tiempo": 5000
+    },
+    "operaciones": [
+        { "pregunta": "7 + 6", "resultadoEsperado": 13 },
+        { "pregunta": "18 - 9", "resultadoEsperado": 9 },
+        { "pregunta": "5 * 5", "resultadoEsperado": 25 },
+        { "pregunta": "20 / 4", "resultadoEsperado": 5 },
+        { "pregunta": "9 + 8", "resultadoEsperado": 17 },
+        { "pregunta": "30 - 15", "resultadoEsperado": 15 },
+        { "pregunta": "6 * 7", "resultadoEsperado": 42 },
+        { "pregunta": "100 / 10", "resultadoEsperado": 10 }
+    ]
+
+}
