@@ -21,11 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonesDelMenu = document.querySelectorAll('.menu-opciones button');
 
 
-    // Función Notificaciones con TOASTIFY
     /**
-     * Muestra una notificación en pantalla usando Toastify.js.
-     * @param {string} texto El mensaje a mostrar.
-     * @param {string} tipo  exito(verde),error(rojo), aviso(azul).
+     * Notificación en pantalla usando Toastify
+     * @param {string} texto El mensaje a mostrar
+     * @param {string} tipo  exito(verde),error(rojo), aviso(azul)
      */
     function mostrarNotificacion(texto, tipo = 'aviso') {
         const colores = {
