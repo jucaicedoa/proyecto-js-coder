@@ -44,6 +44,18 @@
 
         <section id="seccion-menu" style="display: none;">
             <h2>Selecciona un Desafío:</h2>
+            <div class="user-bar">
+                <span id="usuario-label">Invitado</span>
+                <div class="nivel-selector">
+                    <label for="select-nivel">Nivel:</label>
+                    <select id="select-nivel">
+                        <option value="facil">Fácil</option>
+                        <option value="medio">Medio</option>
+                        <option value="dificil">Difícil</option>
+                    </select>
+                </div>
+                <button id="btn-cerrar-sesion">Cerrar sesión</button>
+            </div>
             <div class="menu-opciones">
                 <button data-challenge="memoria">1. Memoria</button>
                 <button data-challenge="operaciones">2. Operaciones</button>
