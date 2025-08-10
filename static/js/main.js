@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonFinalizarSesion = document.getElementById('btn-finalizar-sesion');
     const botonJugarOtraVez = document.getElementById('btn-jugar-otra-vez');
     const botonesDelMenu = document.querySelectorAll('.menu-opciones button');
+    const selectNivel = document.getElementById('select-nivel');
+    const usuarioLabel = document.getElementById('usuario-label');
+    const botonCerrarSesion = document.getElementById('btn-cerrar-sesion');
 
     // notificaciones con TOASTIFY
     function mostrarNotificacion(texto, tipo = 'aviso') {
@@ -41,6 +44,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }).showToast();
     }
     
+    function getNivelActual() {
+        const nivelUI = selectNivel?.value || 'facil';
+        const nivelGuardado = sessionStorage.getItem('edukidsNivel');
+        return (nivelGuardado || nivelUI || 'facil');
+    }
+
+    function inicializarNivel() {
+        const nivelGuardado = sessionStorage.getItem('edukidsNivel') || 'facil';
+        if (selectNivel) {
+            selectNivel.value = nivelGuardado;
+            selectNivel.addEventListener('change', () => {
+                sessionStorage.setItem('edukidsNivel', selectNivel.value);
+                mostrarNotificacion(`Nivel cambiado a: ${selectNivel.value}`, 'aviso');
+            });
+        }
+    }
+
+    function restaurarSesion() {
+        const nombreGuardado = sessionStorage.getItem('edukidsUser');
+        if (nombreGuardado) {
+            usuarioActual = nombreGuardado;
+            puntajesDeSesion = [];
+            tituloHeader.textContent = `¡A jugar, ${usuarioActual}!`;
+            if (usuarioLabel) usuarioLabel.textContent = usuarioActual;
+            navegarHacia('menu');
+        } else {
+            navegarHacia('login');
+        }
+    }
+
     //Cargar datos e inicio apicación
     function iniciarAplicacion() {
         fetch('./data/desafios.json')
@@ -59,6 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Iniciar aplicación 
                 mostrarPuntajes();
+                inicializarNivel();
+                restaurarSesion();
                 botonIniciar.addEventListener('click', iniciarSesion);
                 inputNombreUsuario.addEventListener('keyup', (evento) => {
                     if (evento.key === 'Enter') iniciarSesion();
@@ -82,6 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
             usuarioActual = nombre;
             puntajesDeSesion = [];
             tituloHeader.textContent = `¡A jugar, ${usuarioActual}!`;
+            sessionStorage.setItem('edukidsUser', usuarioActual);
+            if (!sessionStorage.getItem('edukidsNivel')) {
+                sessionStorage.setItem('edukidsNivel', selectNivel?.value || 'facil');
+            }
+            if (usuarioLabel) usuarioLabel.textContent = usuarioActual;
             navegarHacia('menu');
         } else {
             mostrarNotificacion("Por favor, escribe tu nombre para empezar.", "aviso");
@@ -104,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 desafio: nombreDesafio,
                 puntaje,
                 total,
+                nivel: getNivelActual(),
                 fecha: new Date().toLocaleString()
             };
             puntajesGuardados.push(nuevoPuntaje);
@@ -124,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const itemsHTML = puntajesGuardados.reverse().map(p => 
-                `<li>${p.fecha} - ${p.usuario || 'Jugador'} - ${p.desafio}: <strong>${p.puntaje}/${p.total}</strong></li>`
+                `<li>${p.fecha} - ${p.usuario || 'Jugador'} - ${p.desafio} (${p.nivel || '?' }): <strong>${p.puntaje}/${p.total}</strong></li>`
             ).join('');
             
             listaDePuntajes.innerHTML = itemsHTML;
@@ -170,11 +211,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Desafíos
 
     function iniciarDesafioMemoria() {
-    const RONDAS_DE_JUEGO = 3;
+    const nivel = getNivelActual();
+    const rondasPorNivel = { facil: 3, medio: 4, dificil: 5 };
+    const RONDAS_DE_JUEGO = rondasPorNivel[nivel] || 3;
     let rondaActual = 0;
     let aciertos = 0;
 
-    const desafiosMezclados = [...datosDeTodosLosDesafios.memoria].sort(() => 0.5 - Math.random());
+    const dataset = datosDeTodosLosDesafios.memoria?.[nivel] || [];
+    const desafiosMezclados = [...dataset].sort(() => 0.5 - Math.random());
     const desafiosParaLaPartida = desafiosMezclados.slice(0, RONDAS_DE_JUEGO);
 
     function jugarRonda() {
@@ -186,8 +230,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const desafioActual = desafiosParaLaPartida[rondaActual];
         const { tipo, secuencia, tiempo } = desafioActual;
 
-        let separador = (tipo === 'palabras' || tipo === 'colores' || tipo === 'formas') ? ' ' : '';
-        let placeholder = (tipo === 'palabras' || tipo === 'colores' || tipo === 'formas') ? 'PALABRA1 PALABRA2' : 'ABCD';
+        const tiposConEspacios = new Set(['palabras', 'colores', 'formas']);
+        const tokensSonMultiCaracter = secuencia.some(token => String(token).length > 1);
+        const debeUsarEspacios = tiposConEspacios.has(tipo) || (tipo === 'numeros' && tokensSonMultiCaracter);
+
+        const separador = debeUsarEspacios ? ' ' : '';
+        let placeholder;
+        if (tiposConEspacios.has(tipo)) {
+            placeholder = 'PALABRA1 PALABRA2';
+        } else if (tipo === 'numeros') {
+            placeholder = debeUsarEspacios ? '10 20 30' : '1234';
+        } else {
+            placeholder = 'ABCD';
+        }
         let instruccion = `Ronda ${rondaActual + 1} de ${RONDAS_DE_JUEGO}: Memoriza la secuencia de ${tipo}.`;
     
         contenidoDesafio.innerHTML = `
@@ -207,8 +262,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('secuencia-usuario').focus();
             
             document.getElementById('verificar-desafio').onclick = () => {
-                const inputUsuario = document.getElementById('secuencia-usuario').value.toUpperCase();
-                const respuestaUsuario = (tipo === 'palabras' || tipo === 'colores' || tipo === 'formas') ? inputUsuario.split(' ') : inputUsuario.split('');
+                const entradaCruda = document.getElementById('secuencia-usuario').value.toUpperCase().trim();
+
+                let respuestaUsuario;
+                if (debeUsarEspacios) {
+                    respuestaUsuario = entradaCruda.split(/\s+/).filter(Boolean);
+                } else {
+                    const sinEspacios = entradaCruda.replace(/\s+/g, '');
+                    respuestaUsuario = sinEspacios.split('');
+                }
+
                 const esCorrecto = JSON.stringify(respuestaUsuario) === JSON.stringify(secuencia);
                 
                 if (esCorrecto) {
@@ -229,11 +292,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function iniciarDesafioOperaciones() {
   
-    const RONDAS_DE_JUEGO = 5;
+    const nivel = getNivelActual();
+    const rondasPorNivel = { facil: 5, medio: 7, dificil: 10 };
+    const RONDAS_DE_JUEGO = rondasPorNivel[nivel] || 5;
     let rondaActual = 0;
     let aciertos = 0;
 
-    const operacionesMezcladas = [...datosDeTodosLosDesafios.operaciones].sort(() => 0.5 - Math.random());
+    const dataset = datosDeTodosLosDesafios.operaciones?.[nivel] || [];
+    const operacionesMezcladas = [...dataset].sort(() => 0.5 - Math.random());
     const operacionesParaLaPartida = operacionesMezcladas.slice(0, RONDAS_DE_JUEGO);
 
     //controla pregunta
@@ -275,11 +341,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function iniciarDesafioQuiz() {
   
-    const RONDAS_DE_JUEGO = 5;
+    const nivel = getNivelActual();
+    const rondasPorNivel = { facil: 5, medio: 7, dificil: 10 };
+    const RONDAS_DE_JUEGO = rondasPorNivel[nivel] || 5;
     let rondaActual = 0;
     let aciertos = 0;
 
-    const preguntasMezcladas = [...datosDeTodosLosDesafios.quiz].sort(() => 0.5 - Math.random());
+    const dataset = datosDeTodosLosDesafios.quiz?.[nivel] || [];
+    const preguntasMezcladas = [...dataset].sort(() => 0.5 - Math.random());
     const preguntasParaLaPartida = preguntasMezcladas.slice(0, RONDAS_DE_JUEGO);
 
     
@@ -328,11 +397,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
    function iniciarDesafioAdivinarPalabra() {
  
-    const RONDAS_DE_JUEGO = 2;
+    const nivel = getNivelActual();
+    const rondasPorNivel = { facil: 2, medio: 3, dificil: 4 };
+    const RONDAS_DE_JUEGO = rondasPorNivel[nivel] || 2;
     let rondaActual = 0;
     let aciertos = 0;
 
-    const palabrasMezcladas = [...datosDeTodosLosDesafios.adivinaLaPalabra].sort(() => 0.5 - Math.random());
+    const dataset = datosDeTodosLosDesafios.adivinaLaPalabra?.[nivel] || [];
+    const palabrasMezcladas = [...dataset].sort(() => 0.5 - Math.random());
     const palabrasParaLaPartida = palabrasMezcladas.slice(0, RONDAS_DE_JUEGO);
 
     //Controla ronda
@@ -411,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPosibles += puntaje.total;
     }
 
-    const listaResultadosHTML = puntajesDeSesion.map(p => `<li>${p.desafio}: ${p.puntaje}/${p.total}</li>`).join('');
+    const listaResultadosHTML = puntajesDeSesion.map(p => `<li>${p.desafio} (${p.nivel || '?' }): ${p.puntaje}/${p.total}</li>`).join('');
 
     reporteContenido.innerHTML = `
         <img src="./static/img/logo-edukids.ico" alt="logo edukids" />
@@ -457,6 +529,17 @@ document.addEventListener('DOMContentLoaded', () => {
         puntajesDeSesion = [];
         navegarHacia('menu');
     });
+
+    if (botonCerrarSesion) {
+        botonCerrarSesion.addEventListener('click', () => {
+            sessionStorage.removeItem('edukidsUser');
+            mostrarNotificacion('Sesión cerrada', 'aviso');
+            usuarioActual = null;
+            tituloHeader.textContent = 'Bienvenido a Edukids';
+            if (usuarioLabel) usuarioLabel.textContent = 'Invitado';
+            navegarHacia('login');
+        });
+    }
 
     iniciarAplicacion();
 });
