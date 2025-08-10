@@ -230,8 +230,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const desafioActual = desafiosParaLaPartida[rondaActual];
         const { tipo, secuencia, tiempo } = desafioActual;
 
-        let separador = (tipo === 'palabras' || tipo === 'colores' || tipo === 'formas') ? ' ' : '';
-        let placeholder = (tipo === 'palabras' || tipo === 'colores' || tipo === 'formas') ? 'PALABRA1 PALABRA2' : 'ABCD';
+        const tiposConEspacios = new Set(['palabras', 'colores', 'formas']);
+        const tokensSonMultiCaracter = secuencia.some(token => String(token).length > 1);
+        const debeUsarEspacios = tiposConEspacios.has(tipo) || (tipo === 'numeros' && tokensSonMultiCaracter);
+
+        const separador = debeUsarEspacios ? ' ' : '';
+        let placeholder;
+        if (tiposConEspacios.has(tipo)) {
+            placeholder = 'PALABRA1 PALABRA2';
+        } else if (tipo === 'numeros') {
+            placeholder = debeUsarEspacios ? '10 20 30' : '1234';
+        } else {
+            placeholder = 'ABCD';
+        }
         let instruccion = `Ronda ${rondaActual + 1} de ${RONDAS_DE_JUEGO}: Memoriza la secuencia de ${tipo}.`;
     
         contenidoDesafio.innerHTML = `
@@ -251,8 +262,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('secuencia-usuario').focus();
             
             document.getElementById('verificar-desafio').onclick = () => {
-                const inputUsuario = document.getElementById('secuencia-usuario').value.toUpperCase();
-                const respuestaUsuario = (tipo === 'palabras' || tipo === 'colores' || tipo === 'formas') ? inputUsuario.split(' ') : inputUsuario.split('');
+                const entradaCruda = document.getElementById('secuencia-usuario').value.toUpperCase().trim();
+
+                let respuestaUsuario;
+                if (debeUsarEspacios) {
+                    respuestaUsuario = entradaCruda.split(/\s+/).filter(Boolean);
+                } else {
+                    const sinEspacios = entradaCruda.replace(/\s+/g, '');
+                    respuestaUsuario = sinEspacios.split('');
+                }
+
                 const esCorrecto = JSON.stringify(respuestaUsuario) === JSON.stringify(secuencia);
                 
                 if (esCorrecto) {
