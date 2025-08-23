@@ -1,6 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-
-    let datosDeTodosLosDesafios = {};
     let usuarioActual = null;
     let puntajesDeSesion = [];
 
@@ -74,40 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    //Cargar datos e inicio apicación
+    // Inicializar aplicación
     function iniciarAplicacion() {
-        fetch('./data/desafios.json')
-            .then(respuesta => {
-            
-                if (!respuesta.ok) {
-            
-                    throw new Error(`Error HTTP: ${respuesta.status}`);
-                }
-                // Si la respuesta es correcta, se convierte en JSON
-                return respuesta.json();
-            })
-            .then(data => {
-                // Datos en variable local
-                datosDeTodosLosDesafios = data;
-                
-                // Iniciar aplicación 
-                mostrarPuntajes();
-                inicializarNivel();
-                restaurarSesion();
-                botonIniciar.addEventListener('click', iniciarSesion);
-                inputNombreUsuario.addEventListener('keyup', (evento) => {
-                    if (evento.key === 'Enter') iniciarSesion();
-                });
-            })
-            .catch(error => {
-          
-                console.error("No se pudieron cargar los datos de los desafíos:", error);
-                mostrarNotificacion("Error al cargar los juegos.", "error");
-            })
-            .finally(() => {
-          
-            console.log("Proceso de carga de datos finalizado.");
-          
+        // Los datos disponibles desde el data.js
+        // Iniciar aplicación 
+        mostrarPuntajes();
+        mostrarRanking();
+        inicializarNivel();
+        restaurarSesion();
+        botonIniciar.addEventListener('click', iniciarSesion);
+        inputNombreUsuario.addEventListener('keyup', (evento) => {
+            if (evento.key === 'Enter') iniciarSesion();
         });
     }
 
@@ -123,6 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (usuarioLabel) usuarioLabel.textContent = usuarioActual;
             navegarHacia('menu');
+            
+            //actualizar la vista del historial para el nuevo usuario
+            mostrarPuntajes();
         } else {
             mostrarNotificacion("Por favor, escribe tu nombre para empezar.", "aviso");
         }
@@ -157,6 +134,20 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function mostrarPuntajes() {
         listaDePuntajes.innerHTML = '';
+        //Título del historial con el usuario actual
+        const tituloHistorial = document.querySelector('.scores-tabla h3');
+        if (tituloHistorial) {
+            if (usuarioActual) {
+                tituloHistorial.textContent = `Historial de Puntajes de ${usuarioActual}:`;
+            } else {
+                tituloHistorial.textContent = 'Historial de Puntajes:';
+            }
+        }
+        //mostrar mensaje genérico si no hay usuario activo
+        if (!usuarioActual) {
+            listaDePuntajes.innerHTML = '<li>Inicia sesión para ver tu historial.</li>';
+            return;
+        }
         try {
             const puntajesGuardados = JSON.parse(localStorage.getItem('edukidsScores')) || [];
             if (puntajesGuardados.length === 0) {
@@ -164,8 +155,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            const itemsHTML = puntajesGuardados.reverse().map(p => 
-                `<li>${p.fecha} - ${p.usuario || 'Jugador'} - ${p.desafio} (${p.nivel || '?' }): <strong>${p.puntaje}/${p.total}</strong></li>`
+            // Puntajes usuario actual
+            const puntajesUsuario = puntajesGuardados.filter(p => p.usuario === usuarioActual);
+            
+            if (puntajesUsuario.length === 0) {
+                listaDePuntajes.innerHTML = '<li>No tienes puntajes guardados aún.</li>';
+                return;
+            }
+            
+            const itemsHTML = puntajesUsuario.reverse().map((p, index) => 
+                `<li>
+                    <div class="ranking-item">
+                        <div class="ranking-info">
+                            ${p.fecha} - ${p.desafio} (${p.nivel || '?'}): <strong>${p.puntaje}/${p.total}</strong>
+                        </div>
+                        <div class="ranking-actions">
+                            <button class="btn-borrar-item" onclick="borrarPuntajeIndividual('${p.usuario}', '${p.fecha}', '${p.desafio}')">🗑️</button>
+                        </div>
+                    </div>
+                </li>`
             ).join('');
             
             listaDePuntajes.innerHTML = itemsHTML;
@@ -174,6 +182,106 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error al mostrar los puntajes: ", error);
             listaDePuntajes.innerHTML = '<li>Error al cargar puntajes.</li>';
         }
+    }
+
+    function mostrarRanking() {
+        const rankingLista = document.getElementById('ranking-lista');
+        if (!rankingLista) return;
+        
+        rankingLista.innerHTML = '';
+        try {
+            const puntajesGuardados = JSON.parse(localStorage.getItem('edukidsScores')) || [];
+            if (puntajesGuardados.length === 0) {
+                rankingLista.innerHTML = '<li>No hay ranking disponible.</li>';
+                return;
+            }
+            
+            // Puntaje total por usuario
+            const rankingUsuarios = {};
+            puntajesGuardados.forEach(p => {
+                if (!rankingUsuarios[p.usuario]) {
+                    rankingUsuarios[p.usuario] = { total: 0, aciertos: 0, partidas: 0 };
+                }
+                rankingUsuarios[p.usuario].total += p.total;
+                rankingUsuarios[p.usuario].aciertos += p.puntaje;
+                rankingUsuarios[p.usuario].partidas++;
+            });
+            
+            // Array y porcentaje de aciertos
+            const rankingArray = Object.entries(rankingUsuarios).map(([usuario, datos]) => ({
+                usuario,
+                porcentaje: (datos.aciertos / datos.total * 100).toFixed(1),
+                aciertos: datos.aciertos,
+                total: datos.total,
+                partidas: datos.partidas
+            })).sort((a, b) => parseFloat(b.porcentaje) - parseFloat(a.porcentaje));
+            
+            const itemsHTML = rankingArray.map((r, index) => 
+                `<li>
+                    <div class="ranking-item">
+                        <div class="ranking-info">
+                            <strong>${index + 1}.</strong> ${r.usuario} - ${r.porcentaje}% (${r.aciertos}/${r.total}) - ${r.partidas} partidas
+                        </div>
+                        <div class="ranking-actions">
+                            <button class="btn-borrar-item" onclick="borrarUsuarioRanking('${r.usuario}')">🗑️</button>
+                        </div>
+                    </div>
+                </li>`
+            ).join('');
+            
+            rankingLista.innerHTML = itemsHTML;
+
+        } catch (error) {
+            console.error("Error al mostrar el ranking: ", error);
+            rankingLista.innerHTML = '<li>Error al cargar ranking.</li>';
+        }
+    }
+
+    function borrarPuntajeIndividual(usuario, fecha, desafio) {
+        try {
+            const puntajesGuardados = JSON.parse(localStorage.getItem('edukidsScores')) || [];
+            const puntajeIndex = puntajesGuardados.findIndex(p => 
+                p.usuario === usuario && p.fecha === fecha && p.desafio === desafio
+            );
+            
+            if (puntajeIndex !== -1) {
+                puntajesGuardados.splice(puntajeIndex, 1);
+                localStorage.setItem('edukidsScores', JSON.stringify(puntajesGuardados));
+                mostrarPuntajes();
+                mostrarRanking();
+                mostrarNotificacion("Puntaje eliminado con éxito", "exito");
+            }
+        } catch (error) {
+            console.error("Error al borrar puntaje: ", error);
+            mostrarNotificacion("Error al borrar puntaje", "error");
+        }
+    }
+
+    function borrarUsuarioRanking(usuario) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: `¡Esto borrará todos los puntajes de ${usuario} permanentemente!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, ¡bórralo!',
+            cancelButtonText: 'Cancelar'
+        }).then((resultado) => {
+            if (resultado.isConfirmed) {
+                try {
+                    const puntajesGuardados = JSON.parse(localStorage.getItem('edukidsScores')) || [];
+                    const puntajesFiltrados = puntajesGuardados.filter(p => p.usuario !== usuario);
+                    localStorage.setItem('edukidsScores', JSON.stringify(puntajesFiltrados));
+                    mostrarPuntajes();
+                    mostrarRanking();
+                    mostrarNotificacion(`Puntajes de ${usuario} eliminados con éxito`, "exito");
+                } catch (error) {
+                    console.error("Error al borrar usuario: ", error);
+                    mostrarNotificacion("Error al borrar usuario", "error");
+                }
+            }
+        });
     }
 
     function mostrarResultado(aciertos, total, nombreDesafio) {
@@ -188,6 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         guardarPuntaje(nombreDesafio, aciertos, total);
         mostrarPuntajes();
+        mostrarRanking();
         navegarHacia('menu');
     }
 
@@ -495,6 +604,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 }
 
+    // acciones de limpieza
     botonLimpiarHistorial.addEventListener('click', () => {
         Swal.fire({
             title: '¿Estás seguro?',
@@ -509,10 +619,66 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultado.isConfirmed) {
                 localStorage.removeItem('edukidsScores');
                 mostrarPuntajes();
+                mostrarRanking();
                 mostrarNotificacion("Historial borrado con éxito", "exito");
             }
         });
     });
+
+    // limpiar historial del usuario actual
+    const botonLimpiarUsuario = document.getElementById('btn-limpiar-usuario');
+    if (botonLimpiarUsuario) {
+        botonLimpiarUsuario.addEventListener('click', () => {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: `¡Esto borrará todo el historial de ${usuarioActual} permanentemente!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, ¡bórralo!',
+                cancelButtonText: 'Cancelar'
+            }).then((resultado) => {
+                if (resultado.isConfirmed) {
+                    try {
+                        const puntajesGuardados = JSON.parse(localStorage.getItem('edukidsScores')) || [];
+                        const puntajesFiltrados = puntajesGuardados.filter(p => p.usuario !== usuarioActual);
+                        localStorage.setItem('edukidsScores', JSON.stringify(puntajesFiltrados));
+                        mostrarPuntajes();
+                        mostrarRanking();
+                        mostrarNotificacion("Tu historial ha sido borrado con éxito", "exito");
+                    } catch (error) {
+                        console.error("Error al borrar historial del usuario: ", error);
+                        mostrarNotificacion("Error al borrar historial", "error");
+                    }
+                }
+            });
+        });
+    }
+
+    // limpiar todo el ranking
+    const botonLimpiarRanking = document.getElementById('btn-limpiar-ranking');
+    if (botonLimpiarRanking) {
+        botonLimpiarRanking.addEventListener('click', () => {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡Esto borrará todo el ranking general permanentemente!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, ¡bórralo!',
+                cancelButtonText: 'Cancelar'
+            }).then((resultado) => {
+                if (resultado.isConfirmed) {
+                    localStorage.removeItem('edukidsScores');
+                    mostrarPuntajes();
+                    mostrarRanking();
+                    mostrarNotificacion("Ranking general borrado con éxito", "exito");
+                }
+            });
+        });
+    }
 
     botonesDelMenu.forEach(boton => {
         boton.addEventListener('click', (evento) => {
@@ -537,9 +703,20 @@ document.addEventListener('DOMContentLoaded', () => {
             usuarioActual = null;
             tituloHeader.textContent = 'Bienvenido a Edukids';
             if (usuarioLabel) usuarioLabel.textContent = 'Invitado';
+            
+            // Limpiar la vista del historial individual
+            if (listaDePuntajes) {
+                listaDePuntajes.innerHTML = '<li>No hay puntajes guardados aún.</li>';
+            }
+            
+            // restaurar el título del historial
+            const tituloHistorial = document.querySelector('.scores-tabla h3');
+            if (tituloHistorial) {
+                tituloHistorial.textContent = 'Historial de Puntajes:';
+            }
+            
             navegarHacia('login');
         });
     }
 
     iniciarAplicacion();
-});
