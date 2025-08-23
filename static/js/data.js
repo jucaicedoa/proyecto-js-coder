@@ -1,4 +1,4 @@
-{
+const datosDeTodosLosDesafios = {
   "memoria": {
     "facil": [
       { "tipo": "letras", "secuencia": ["V", "T", "R", "S"], "tiempo": 6000 },
@@ -93,7 +93,7 @@
       { "pregunta": "¿Cuál de estas letras es una vocal?", "opciones": ["B", "E", "P"], "indiceRespuestaCorrecta": 1 },
       { "pregunta": "¿Cuál de estos números es primo?", "opciones": ["15", "21", "23"], "indiceRespuestaCorrecta": 2 },
       { "pregunta": "¿Cuál es la capital de Japón?", "opciones": ["Kioto", "Tokio", "Osaka"], "indiceRespuestaCorrecta": 1 },
-      { "pregunta": "¿Cuál es el elemento más abundante en el universo?", "opciones": ["Oxígeno", "Hidrógeno", "Carbono"], "indiceRespuestaCorrecta": 1 },
+      { "pregunta": "¿Cuál es el elemento más abundante en el universo?", "opciones": ["Oxígeno", "Hidrógeno", "Carbono"], "indiceRespuestaCorrecta": 2 },
       { "pregunta": "¿Qué idioma tiene más hablantes nativos?", "opciones": ["Inglés", "Chino mandarín", "Español"], "indiceRespuestaCorrecta": 1 },
       { "pregunta": "¿Qué órgano bombea la sangre por el cuerpo?", "opciones": ["Pulmones", "Hígado", "Corazón"], "indiceRespuestaCorrecta": 2 }
     ]
@@ -118,4 +118,4 @@
       { "palabraSecreta": "TERMOMETRO", "pistas": ["Mido la temperatura.", "Puedo tener mercurio o sensores.", "Se usa cuando tienes fiebre."], "intentosMaximos": 3 }
     ]
   }
-}
+};
