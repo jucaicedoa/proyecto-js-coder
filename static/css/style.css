@@ -238,6 +238,106 @@ input:focus {
     background-color: #5f4a8b;
 }
 
+/* Ranking y botones de limpieza */
+.ranking-tabla {
+    background: var(--morado-oscuro);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.ranking-tabla h3 {
+    color: var(--naranja-principal);
+    margin: 0 0 15px 0;
+    text-align: center;
+}
+
+#ranking-lista {
+    list-style: none;
+    padding: 0;
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 15px;
+}
+
+#ranking-lista::-webkit-scrollbar {
+    width: 8px;
+}
+
+#ranking-lista::-webkit-scrollbar-track {
+    background: var(--morado-oscuro);
+    border-radius: 4px;
+}
+
+#ranking-lista::-webkit-scrollbar-thumb {
+    background-color: var(--naranja-principal);
+    border-radius: 4px;
+}
+
+#ranking-lista li {
+    background-color: var(--morado-claro);
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#ranking-lista li:hover {
+    background-color: #5f4a8b;
+}
+
+.ranking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.ranking-info {
+    flex-grow: 1;
+}
+
+.ranking-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-borrar-item {
+    background: var(--rojo-peligro);
+    color: var(--blanco);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.2s;
+}
+
+.btn-borrar-item:hover {
+    background-color: #a93226;
+}
+
+#btn-limpiar-usuario, #btn-limpiar-ranking {
+    background: var(--rojo-peligro);
+    color: var(--blanco);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+    width: 100%;
+}
+
+#btn-limpiar-usuario:hover, #btn-limpiar-ranking:hover {
+    background-color: #a93226;
+}
+
 /*Reporte Final y footer*/
 #reporte-final-contenido {
     background: #fff;
